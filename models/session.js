@@ -25,18 +25,4 @@ schema.static('createSession', function (callback) {
   });
 });
 
-schema.static('compareSession', function (sessionId, sessionToken, callback) {
-  this.findById({_id: sessionId}, function (err, session) {
-    if (err) return callback(err, null);
-    else if (!session) return callback(new Error('no session found'));
-
-    sessionToken = crypto.createHash('md5')
-                    .update(sessionToken)
-                    .digest('hex');
-
-    if (sessionToken === session.token) callback(null, session);
-    else callback(new Error('session not valid'));
-  });
-});
-
-module.exports = mongoose.model('Sessions', schema);
+module.exports = mongoose.model('session', schema, 'sessions');

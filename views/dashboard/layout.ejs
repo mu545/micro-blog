@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+    <title><%= template.title %></title>
+
+    <!-- General CSS Files -->
+    <link rel="stylesheet" href="/stisla/modules/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/stisla/modules/fontawesome/css/all.min.css">
+
+    <!-- CSS Libraries -->
+
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="/stisla/css/style.min.css">
+    <link rel="stylesheet" href="/stisla/css/components.min.css">
+
+    <%- include('head/' + template.name); %>
+
+  </head>
+
+<body>
+  
+  <div id="app">
+    <div class="main-wrapper main-wrapper-1">
+      <div class="navbar-bg"></div>
+      <nav id="navbar" class="navbar navbar-expand-lg main-navbar">
+        <form class="form-inline mr-auto">
+          <ul class="navbar-nav mr-3">
+            <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg"><i class="fas fa-bars"></i></a></li>
+            <li><a href="#" data-toggle="search" class="nav-link nav-link-lg d-sm-none"><i class="fas fa-search"></i></a></li>
+          </ul>
+        </form>
+        <ul class="navbar-nav navbar-right">
+          <li class="dropdown"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
+            <img alt="image" src="/stisla/img/avatar/avatar-1.png" class="rounded-circle mr-1">
+            <div class="d-sm-none d-lg-inline-block"><%= user.username %> </div></a>
+            <div class="dropdown-menu dropdown-menu-right">
+              <div class="dropdown-title"><%= user.user_info.name %></div>
+              <div class="dropdown-divider"></div>
+              <a href="javascript:void(0)" class="dropdown-item has-icon text-danger" data-button="navbar">
+                <i class="fas fa-sign-out-alt"></i> Logout
+              </a>
+            </div>
+          </li>
+        </ul>
+      </nav>
+      <div class="main-sidebar sidebar-style-2">
+        <aside id="sidebar-wrapper">
+          <div class="sidebar-brand">
+            <a href="/users/dashboard">Micro Blog</a>
+          </div>
+          <div class="sidebar-brand sidebar-brand-sm">
+            <a href="/users/dashboard">MB</a>
+          </div>
+          <ul class="sidebar-menu">
+            <li class="menu-header">Dashboard</li>
+            <li><a class="nav-link" href="/users/dashboard"><i class="fas fa-th"></i> <span>Dashboard</span></a></li>
+          </ul>
+        </aside>
+      </div>
+
+      <!-- Main Content -->
+      <div id="dashboard" class="main-content">
+        <%- include('content/' + template.name); %>
+      </div>
+      <footer class="main-footer">
+        <div class="footer-left">
+          Copyright &copy; Musa Sutisna 2018 <div class="bullet"></div> Themes By <a href="https://getstisla.com">Stisla</a>
+        </div>
+        <div class="footer-right">
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- General JS Scripts -->
+  <script src="/stisla/modules/jquery.min.js"></script>
+  <script src="/stisla/modules/popper.js"></script>
+  <script src="/stisla/modules/tooltip.js"></script>
+  <script src="/stisla/modules/bootstrap/js/bootstrap.min.js"></script>
+  <script src="/stisla/modules/nicescroll/jquery.nicescroll.min.js"></script>
+  <script src="/stisla/modules/moment.min.js"></script>
+  <script src="/stisla/js/stisla.js"></script>
+
+  <%- include('footer/' + template.name); %>
+
+  <!-- Template JS File -->
+  <script src="/stisla/js/scripts.js"></script>
+</body>
+</html>

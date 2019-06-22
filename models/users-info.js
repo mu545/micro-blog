@@ -7,4 +7,4 @@ const schema = new mongoose.Schema({
   registered: Date
 });
 
-module.exports = mongoose.model('User_info', schema);
+module.exports = mongoose.model('users_info', schema, 'users_info');

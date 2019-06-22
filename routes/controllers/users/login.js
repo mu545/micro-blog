@@ -20,7 +20,7 @@ module.exports.postLogin = function (req, res) {
 
   if (!errors.isEmpty()) return res.status(400).json({err: errors.array({onlyFirstError: false})});
 
-  req.models.userAccess.validateUser(
+  req.models.usersAccess.validateUser(
     req.body.username,
     req.body.password,
     function (err, userAccess) {
@@ -29,15 +29,39 @@ module.exports.postLogin = function (req, res) {
       req.models.session.createSession(function (err, session, token) {
           if (err) return res.status(400).json({err: err.message});
 
-          req.models.userAccess.updateSession(
+          req.models.usersAccess.updateSession(
             userAccess._id,
             session._id,
             function (err, result) {
               if (err) return res.status(400).json({err: err.message});
 
-              res.cookie('session', {id: session._id, token: token}, {path: '/users', expires: new Date(Date.now() + (1000 * 60) * 120)})
-                .json({msg: 'login successful'});
+              req.models.systemInformation.newUserOnline(function (err) {
+                if (err) return res.status(400).json({err: err.message});
+
+                res.cookie('session', {id: session._id, token: token}, {path: '/users', expires: new Date(Date.now() + (1000 * 60) * 120)})
+                  .json({msg: 'login successful'});
+              });
             });
         });
     });
+};
+
+module.exports.getLogout = function (req, res) {
+  req.models.session.remove({_id: res.data.user.session._id}, function (err) {
+    if (err) return res.status(400).json({err: err.message});
+
+    req.models.usersAccess.updateSession(
+      res.data.user._id,
+      null,
+      function (err) {
+        if (err) return res.status(400).json({err: err.message});
+
+        req.models.systemInformation.newUserOffline(function (err) {
+          if (err) return res.status(400).json({err: err.message});
+
+          res.cookie('session', {id: res.data.user.session._id, token: res.data.user.session.token}, {path: '/users', expires: new Date(Date.now() - 1)})
+            .json({msg: 'logout successful'});
+        });
+      });
+  });
 };

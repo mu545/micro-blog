@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 
 const schema = new mongoose.Schema({
-  role: String
+  role: String,
+  users_total: Number
 });
 
-module.exports = mongoose.model('User_roles', schema);
+module.exports = mongoose.model('user_roles', schema, 'user_roles');

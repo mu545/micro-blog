@@ -1,13 +1,15 @@
 const session = require('./session.js');
+const systemInformation = require('./system-information.js');
 const userRoles = require('./user-roles.js');
-const userAccess = require('./user-access.js');
-const userInfo = require('./user-info.js');
+const usersAccess = require('./users-access.js');
+const usersInfo = require('./users-info.js');
 
 const models = {
   session,
+  systemInformation,
   userRoles,
-  userAccess,
-  userInfo
+  usersAccess,
+  usersInfo
 };
 
 module.exports = function (req, res, next) {
