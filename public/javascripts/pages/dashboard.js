@@ -2,8 +2,11 @@ $(document).ready(function () {
   // a.k.a this
   let self = this;
 
-  // input
-  let text = [];
+  // element
+  let dom = $('#dashboard');
+
+  // context data
+  let context = {};
 
   /**
    * Initialization.
@@ -11,8 +14,37 @@ $(document).ready(function () {
    * @return  void
    */
   let init = function () {
-    text = $('#dashboard').find('*[data-text="dashboard"]');
+    dashboardInfo(dom, context);
+  };
 
+  // Run init
+  init();
+});
+
+/**
+ * Dashboard info.
+ *
+ * @param   jquery
+ * @param   context
+ * @return  void
+ */
+let dashboardInfo = function (dom, context) {
+  // a.k.a this
+  let self = this;
+
+  // create context
+  dom = dom.find('#dashboardInfo');
+  let ctx = context.dashboardInfo = {};
+
+  // input
+  let text = dom.find('*[data-text="dashboard"]');
+
+  /**
+   * Initialization.
+   *
+   * @return  void
+   */
+  let init = function () {
     self.loadSystemInformation();
   };
 
@@ -32,11 +64,12 @@ $(document).ready(function () {
 
     $.ajax({
       type: 'GET',
-      url: '/users/api/system-information',
+      url: '/users/api/v1/system-information',
       error: function (jqXHR) {
         swal({
           icon: 'error',
-          content: $(messageXHR(jqXHR))[0]
+          content: $(messageXHR(jqXHR))[0],
+          button: 'Ok',
         });
       },
       success: function (data) {
@@ -52,5 +85,5 @@ $(document).ready(function () {
   };
 
   // Run init
-  init();
-});
+  init(); 
+};

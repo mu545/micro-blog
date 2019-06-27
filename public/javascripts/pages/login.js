@@ -2,9 +2,42 @@ $(document).ready(function () {
   // a.k.a this
   let self = this;
 
+  // element
+  let dom = $('#login');
+
+  // context data
+  let context = {};
+
+  // Initialization
+  let init = function () {
+    loginForm(dom, context);
+  };
+
+  // Run init
+  init();
+});
+
+/**
+ * Login form.
+ *
+ * @param   jquery
+ * @param   context
+ * @return  void
+ */
+let loginForm = function(dom, context) {
+  // a.k.a this
+  let self = this;
+
+  // create context
+  dom = dom.find('#loginForm');
+  let ctx = context.loginForm = {};
+
   // input
-  let input = [];
-  let button = [];
+  let input = ctx.input = dom.find('*[data-input="login"]');
+  let button = ctx.button = dom.find('*[data-button="login"]');
+
+  // element
+  let domMessages = dom.find('#loginFormMessages');
 
   /**
    * Initialization.
@@ -12,10 +45,7 @@ $(document).ready(function () {
    * @return  void
    */
   let init = function () {
-    input = $('#formLogin').find('*[data-input="login"]');
-    button = $('#formLogin').find('*[data-button="login"]');
-
-    $('#formLogin').submit(self.login);
+    dom.submit(self.login);
   };
 
   /**
@@ -28,13 +58,13 @@ $(document).ready(function () {
 
     $.ajax({
       type: 'POST',
-      url: '/users/api/login',
+      url: '/users/api/v1/auth',
       data: {username: input[0].value, password: input[1].value},
       error: function (jqXHR) {
-        $('#formMessages').html(messageXHR(jqXHR, {type: 'alert'}));
+        domMessages.html(messageXHR(jqXHR, {type: 'alert'}));
       },
       success: function (data, status, jqXHR) {
-        $('#formMessages').html(messageXHR(jqXHR, {type: 'alert'}));
+        domMessages.html(messageXHR(jqXHR, {type: 'alert'}));
 
         window.location.href = '/users/dashboard';
       }
@@ -45,4 +75,4 @@ $(document).ready(function () {
 
   // Run init
   init();
-});
+};

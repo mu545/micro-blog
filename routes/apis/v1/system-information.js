@@ -1,4 +1,4 @@
-module.exports.getSystemInformation = function (req, res) {
+module.exports.get = function (req, res) {
   req.models.systemInformation.findOne(function (err, systemInformation) {
     if (err) {
       res.status(400).json({err: err.message});

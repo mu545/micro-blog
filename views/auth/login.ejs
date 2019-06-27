@@ -19,7 +19,7 @@
 </head>
 
 <body>
-  <div id="app">
+  <div id="login">
     <section class="section">
       <div class="container mt-5">
         <div class="row">
@@ -32,11 +32,10 @@
               <div class="card-header"><h4>Login</h4></div>
 
               <div class="card-body">
-                <div id="formMessages">
-                  <!-- fill with messages -->
-                </div>
-
-                <form id="formLogin" method="POST" action="#" class="needs-validation" novalidate="">
+                <form id="loginForm" method="POST" action="#" class="needs-validation" novalidate="">
+                  <div id="loginFormMessages">
+                    <!-- fill with messages -->
+                  </div>
                   <div class="form-group">
                     <label for="username">Username</label>
                     <input id="username" type="text" class="form-control" name="username" data-input="login" tabindex="1" required autofocus>

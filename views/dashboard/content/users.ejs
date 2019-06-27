@@ -1,0 +1,144 @@
+<section id="users" class="section">
+  <div class="section-header">
+    <h1>Users</h1>
+  </div>
+  <div class="section-body">
+    <div class="row">
+      <div class="col-12 col-md-6 col-lg-8 col-xl-8">
+        <div class="card">
+          <div class="card-header">
+            <h4>List users</h4>
+          </div>
+          <div class="card-body pb-0">
+            <div class="row mb-3">
+              <div class="col-12">
+                <div class="alert-icon text-warning">
+                  <i class="far fa-lightbulb"></i> Click user to see detail
+                </div>
+              </div>
+            </div>
+            <div id="usersList" class="row">
+              <!-- fill with list users -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4 col-xl-4">
+        <div class="card">
+          <form id="usersNewForm" method="POST" action="#" class="needs-validation" novalidate="" style="display: block;">
+            <div class="card-header">
+              <h4>New user</h4>
+            </div>
+            <div class="card-body">
+              <div id="usersNewFormMessages">
+                <!-- fill with messages -->
+              </div>
+              <div class="form-group">
+                <label>User role</label>
+                <select class="form-control" data-select="users">
+                  <option value="admin">Admin</option>
+                  <option value="author">Author</option>
+                  <option selected value="user">User</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Complete name</label>
+                <input type="text" class="form-control" data-input="users" required placeholder="complete user name">
+                <div class="invalid-feedback">
+                  name is required
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Email</label>
+                <input type="email" class="form-control" data-input="users" required placeholder="user email address">
+                <div class="invalid-feedback">
+                  email address is required
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Phone number</label>
+                <input type="tel" class="form-control" data-input="users" required placeholder="phone number">
+                <div class="invalid-feedback">
+                  phone number is required
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Username</label>
+                <input type="text" class="form-control" data-input="users" required min="6" max="35" placeholder="username used to login">
+                <div class="invalid-feedback">
+                  user name is required (alphabet or numeric with length min 6 and max 35)
+                </div>
+              </div>
+              <div class="form-group mb-0">
+                <label>Password</label>
+                <input type="password" class="form-control" data-input="users" required min="6" max="35" placeholder="main password">
+                <div class="invalid-feedback">
+                  alphabet or numeric with length min 6 and max 35
+                </div>
+                <input type="password" class="form-control mt-3" data-input="users" required min="6" max="35" placeholder="confirm main password">
+                <div class="invalid-feedback">
+                  alphabet or numeric with length min 6 and max 35
+                </div>
+              </div>
+            </div>
+            <div class="card-footer text-right">
+              <button type="submit" class="btn btn-primary" data-button="users">Create</button>
+            </div>
+          </form>
+          <form id="usersUpdateForm" method="POST" action="#" class="needs-validation" novalidate="" style="display: none;">
+            <div class="card-header">
+              <h4>Update user</h4>
+              <div class="card-header-action">
+                <button type="button" class="btn btn-icon btn-default" data-button="users"><i class="fas fa-times"></i></button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div id="usersUpdateFormMessages">
+                <!-- fill with messages -->
+              </div>
+              <div class="form-group">
+                <label>User role</label>
+                <select class="form-control" data-select="users">
+                  <option value="admin">Admin</option>
+                  <option value="author">Author</option>
+                  <option selected value="user">User</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Complete name</label>
+                <input type="text" class="form-control" data-input="users" required placeholder="complete user name">
+                <div class="invalid-feedback">
+                  name is required
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Email</label>
+                <input type="email" class="form-control" data-input="users" required disabled placeholder="user email address">
+                <div class="invalid-feedback">
+                  email address is required
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Phone number</label>
+                <input type="tel" class="form-control" data-input="users" required placeholder="phone number">
+                <div class="invalid-feedback">
+                  phone number is required
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Username</label>
+                <input type="text" class="form-control" data-input="users" required min="6" max="35" disabled placeholder="username used to login">
+                <div class="invalid-feedback">
+                  user name is required (alphabet or numeric with length min 6 and max 35)
+                </div>
+              </div>
+            </div>
+            <div class="card-footer text-right">
+              <button type="submit" class="btn btn-primary" data-button="users">Update</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

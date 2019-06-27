@@ -5,6 +5,10 @@ const schema = new mongoose.Schema({
   total_active_users: Number
 });
 
+schema.static('newUserCreated', function (callback) {
+  this.updateOne({}, {$inc: {total_users: 1}}, callback);
+});
+
 schema.static('newUserOnline', function (callback) {
   this.updateOne({}, {$inc: {total_active_users: 1}}, callback);
 });

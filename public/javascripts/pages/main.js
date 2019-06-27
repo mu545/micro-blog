@@ -2,8 +2,11 @@ $(document).ready(function () {
   // a.k.a this
   let self = this;
 
-  // input
-  let button = [];
+  // element
+  let dom = $('#main');
+
+  // context data
+  let context = {};
 
   /**
    * Initialization.
@@ -11,8 +14,37 @@ $(document).ready(function () {
    * @return  void
    */
   let init = function () {
-    button = $('#navbar').find('*[data-button="navbar"]');
+    mainNavbar(dom, context);
+  };
 
+  // Run init
+  init();
+});
+
+/**
+ * Main navbar.
+ *
+ * @param   jquery
+ * @param   context
+ * @return  void
+ */
+let mainNavbar = function (dom, context) {
+  // a.k.a this
+  let self = this;
+
+  // create context
+  dom = dom.find('#mainNavbar');
+  let ctx = context.mainNavbar = {};
+
+  // input
+  let button = ctx.button = dom.find('*[data-button="main"]');
+
+  /**
+   * Initialization.
+   *
+   * @return  void
+   */
+  let init = function () {
     $(button[0]).click(self.logout);
   };
 
@@ -31,8 +63,8 @@ $(document).ready(function () {
     });
 
     $.ajax({
-      type: 'GET',
-      url: '/users/api/logout',
+      type: 'DELETE',
+      url: '/users/api/v1/auth',
       error: function (jqXHR) {
         swal({
           icon: 'error',
@@ -54,4 +86,4 @@ $(document).ready(function () {
 
   // Run init
   init();
-});
+};

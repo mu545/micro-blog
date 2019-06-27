@@ -1,67 +1,87 @@
 var express = require('express');
 var router = express.Router();
 
-const login = require('./controllers/users/login.js');
-const dashboard = require('./controllers/users/dashboard.js');
-const systemInformation = require('./controllers/users/system-information.js');
+const apis = require('./apis/index.js');
+const controllers = require('./controllers/index.js');
 
-router.post('/api/login', login.validation, login.postLogin);
+/* Pages disallowed and not allowed authentication */
+pagesPassAuth = [
+  'GET/login',
+  'POST/api/v1/auth'
+];
+pagesDenyAuth = [
+  'GET/login'
+];
+pagesOptionalAuth = [
+  'DELETE/api/v1/auth'
+];
 
-/* Users authentication api */
-router.get('/api/*', function (req, res, next) {
-  let session = req.cookies['session'];
-  let sessionId, sessionToken;
+/* User authentication */
+router.all('/*', [
+  function (req, res, next) {
+    let visitPage = req.method + req.path;
 
-  if (typeof session == 'undefined') return res.json({err: 'please login first'});
+    res.locals = {
+      auth: 'use',
+      auth_err: null,
+      user: null
+    };
 
-  sessionId = session['id'];
-  sessionToken = session['token'];
+    if (pagesPassAuth.indexOf(visitPage) > -1) res.locals.auth = 'pass';
+    else if (pagesDenyAuth.indexOf(visitPage) > -1) res.locals.auth = 'deny';
+    else if (pagesOptionalAuth.indexOf(visitPage) > -1) res.locals.auth = 'optional';
 
-  if (typeof sessionId == 'undefined' || sessionToken == 'undefined') {
-    res.status(401).send({err: 'please login first'});
-  } else {
-    req.models.usersAccess.validateAccess(sessionId, sessionToken, function (err, userAccess) {
-      if (err) return res.status(401).json({err: err.message});
+    if (res.locals.auth === 'pass') return next();
 
-      res.data = {
-        user : userAccess
-      };
+    let session = req.cookies['session'];
 
+    if (typeof session == 'undefined') return next();
+
+    let sessionId = session['id'];
+    let sessionToken = session['token'];
+
+    if (typeof sessionId == 'undefined' || typeof sessionToken == 'undefined') {
       next();
-    });
-  }
-});
+    } else {
+      req.models.usersAccess.validateAccess(
+        sessionId,
+        sessionToken,
+        function (err, userAccess) {
+          res.locals.auth_err = err;
+          res.locals.user = userAccess;
 
-router.get('/api/logout', login.getLogout);
-router.get('/api/system-information', systemInformation.getSystemInformation);
-
-router.get('/login', login.main);
-
-/* Users authentication. */
-router.get('/*', function (req, res, next) {
-  let session = req.cookies['session'];
-  let sessionId, sessionToken;
-
-  if (typeof session == 'undefined') return res.redirect('/users/login');
-
-  sessionId = session['id'];
-  sessionToken = session['token'];
-
-  if (typeof sessionId == 'undefined' || sessionToken == 'undefined') {
-    res.redirect('/users/login');
-  } else {
-    req.models.usersAccess.validateAccess(sessionId, sessionToken, function (err, userAccess) {
-      if (err) return res.redirect('/users/login');
-
-      res.data = {
-        user : userAccess
-      };
-
+          next();
+        });
+    }
+  },
+  function (req, res, next) {
+    if (res.locals.auth === 'use') {
+      if (res.locals.user === null) {
+        if (req.xhr) {
+          if (res.locals.auth_err) res.status(400).json({err: res.locals.auth_err.message});
+          else res.status(401).json({err: 'please login first'});
+        } else {
+          res.redirect('/users/login');
+        }
+      } else {
+        next();
+      }
+    } else if (res.locals.auth === 'deny') {
+      if (res.locals.user !== null) {
+        if (req.xhr) res.status(401).json({err: 'you has been login'});
+        else res.redirect('/users/dashboard');
+      } else {
+        next();
+      }
+    } else if (res.locals.auth === 'optional') {
       next();
-    });
+    } else {
+      next();
+    }
   }
-});
+]);
 
-router.get('/dashboard', dashboard.main);
+apis(router);
+controllers(router);
 
 module.exports = router;
