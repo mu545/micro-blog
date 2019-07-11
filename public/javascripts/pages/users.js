@@ -86,6 +86,7 @@ let usersList = function (dom, context) {
       data: filter,
       error: function (jqXHR) {
         swal({
+          icon: 'error',
           content: $(messageXHR(jqXHR))[0],
           button: 'Ok'
         });

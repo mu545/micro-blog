@@ -1,0 +1,84 @@
+<section id="posts" class="section">
+  <div class="section-header">
+    <h1>List</h1>
+  </div>
+  <div class="row">
+    <div id="postsList" class="col-12 col-md-8 col-lg-8">
+      <div class="card">
+        <div class="card-header">
+          <h4>List posts</h4>
+          <form id="postsListFilter" method="POST" action="#" class="card-header-form">
+            <div class="input-group">
+              <input type="text" name="search" class="form-control" data-input="posts" placeholder="Search">
+              <div class="input-group-btn">
+                <button type="submit" class="btn btn-primary btn-icon" data-button="posts"><i class="fas fa-search"></i></button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="card-body">
+          <div class="row mb-3">
+            <div class="col-12">
+              <div class="alert-icon text-warning">
+                <i class="far fa-lightbulb"></i> Click post to see detail
+              </div>
+            </div>
+          </div>
+          <table id="postsListTable" class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Title</th>
+                <th scope="col">Date</th>
+                <th scope="col">Author</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- fill with list posts -->
+            </tbody>
+          </table>
+        </div>
+        <div id="postsListPage" class="card-footer">
+          <!-- fill with pages -->
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-4 col-lg-4">
+      <div class="card card-info">
+        <form id="postsDetailForm" method="POST" action="#">
+          <div class="card-header">
+            <h4>Detail post</h4>
+          </div>
+          <div class="card-body">
+            <div class="form-group row">
+              <label>Title</label>
+              <input type="text" class="form-control" disabled data-input="posts" required placeholder="title of post">
+            </div>
+            <div class="form-group row">
+              <label>Labels</label>
+              <select class="form-control" multiple disabled data-select="posts" style="height: 100%">
+                <!-- fill with list labels -->
+              </select>
+            </div>
+            <div class="form-group row">
+              <label>Publish date</label>
+              <input type="text" class="form-control" disabled data-input="posts">
+            </div>
+            <div class="form-group row">
+              <label>Last update</label>
+              <input type="text" class="form-control" disabled data-input="posts">
+            </div>
+            <div class="form-group row">
+              <label>Author</label>
+              <input type="text" class="form-control" disabled data-input="posts" style="height: 100%;">
+            </div>
+          </div>
+          <div class="card-footer text-right">
+            <button type="button" class="btn btn-primary" data-button="posts">Update</button>
+            <button type="button" class="btn btn-danger" data-button="posts">Delete</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

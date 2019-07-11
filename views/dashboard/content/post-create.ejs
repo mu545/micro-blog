@@ -1,0 +1,44 @@
+<section id="post" class="section">
+  <div class="section-header">
+    <h1>Create</h1>
+  </div>
+  <div class="section-body">
+    <div class="col-12 col-md-12 col-lg-12">
+      <div class="card">
+        <form id="postNewForm">
+          <div class="card-header">
+            <h4>New post</h4>
+          </div>
+          <div class="card-body">
+            <div class="form-group row mb-4">
+              <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Title</label>
+              <div class="col-sm-12 col-md-7">
+                <input type="text" class="form-control" data-input="post" placeholder="title of post">
+              </div>
+            </div>
+            <div class="form-group row mb-4">
+              <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Labels</label>
+              <div class="col-sm-12 col-md-7">
+                <select class="form-control" multiple data-select="post" style="height: 100%;">
+                  <!-- fill with list labels -->
+                </select>
+              </div>
+            </div>
+            <div class="form-group row mb-4">
+              <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Content</label>
+              <div class="col-sm-12 col-md-7">
+                <textarea data-input="post"></textarea>
+              </div>
+            </div>
+            <div class="form-group row mb-4">
+              <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"></label>
+              <div class="col-sm-12 col-md-7">
+                <button type="submit" class="btn btn-primary" data-button="post">Publish</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

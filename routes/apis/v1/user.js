@@ -104,28 +104,28 @@ function updateUserRole(req, res, next) {
 module.exports.post = [
   body('role')
     .exists({checkFalsy: true}).withMessage('role is required')
-    .isAlpha().withMessage('role not valid')
-    .isLength({min: 1, max: 255}).withMessage('role not valid'),
+    .isLength({min: 1, max: 255}).withMessage('role not valid')
+    .isAlpha().withMessage('role not valid'),
   body('name')
     .exists({checkFalsy: true}).withMessage('name is required')
-    .matches(/^[a-z0-9 ]+$/i).withMessage('name not valid')
-    .isLength({min: 6, max: 255}).withMessage('name not valid'),
+    .isLength({min: 6, max: 255}).withMessage('name not valid')
+    .matches(/^[a-z0-9 ]+$/i).withMessage('name not valid'),
   body('email')
     .exists({checkFalsy: true}).withMessage('email is required')
-    .isEmail().withMessage('email not valid')
-    .isLength({min: 1, max: 225}).withMessage('email not valid'),
+    .isLength({min: 1, max: 225}).withMessage('email not valid')
+    .isEmail().withMessage('email not valid'),
   body('phone')
     .exists({checkFalsy: true}).withMessage('phone number is required')
-    .isNumeric().withMessage('phone number not valid')
-    .isLength({min: 10, max: 15}).withMessage('phone number not valid'),
+    .isLength({min: 10, max: 15}).withMessage('phone number not valid')
+    .isNumeric().withMessage('phone number not valid'),
   body('username')
     .exists({checkFalsy: true}).withMessage('username is required')
-    .isAlphanumeric().withMessage('username not valid')
-    .isLength({min: 6, max: 35}).withMessage('username not valid'),
+    .isLength({min: 6, max: 35}).withMessage('username not valid')
+    .isAlphanumeric().withMessage('username not valid'),
   body('password')
     .exists({checkFalsy: true}).withMessage('password is required')
-    .isAlphanumeric().withMessage('password not valid')
-    .isLength({min: 6, max: 35}).withMessage('password not valid'),
+    .isLength({min: 6, max: 35}).withMessage('password not valid')
+    .isAlphanumeric().withMessage('password not valid'),
   body('confirm')
     .custom(function (value, {req}) {
       if (value != req.body.password) return new Error('confirm password not match');
@@ -244,18 +244,18 @@ module.exports.put = [
   body('role')
     .optional()
     .exists({checkFalsy: true}).withMessage('role is required')
-    .isAlpha().withMessage('role not valid')
-    .isLength({min: 1, max: 255}).withMessage('role not valid'),
+    .isLength({min: 1, max: 255}).withMessage('role not valid')
+    .isAlpha().withMessage('role not valid'),
   body('name')
     .optional()
     .exists({checkFalsy: true}).withMessage('name is required')
-    .matches(/^[a-z0-9 ]+$/i).withMessage('name not valid')
-    .isLength({min: 6, max: 255}).withMessage('name not valid'),
+    .isLength({min: 6, max: 255}).withMessage('name not valid')
+    .matches(/^[a-z0-9 ]+$/i).withMessage('name not valid'),
   body('phone')
     .optional()
     .exists({checkFalsy: true}).withMessage('phone number is required')
-    .isNumeric().withMessage('phone number not valid')
-    .isLength({min: 10, max: 15}).withMessage('phone number not valid'),
+    .isLength({min: 10, max: 15}).withMessage('phone number not valid')
+    .isNumeric().withMessage('phone number not valid'),
   validationInput,
   isUserIdExists,
   isUserRoleExists,

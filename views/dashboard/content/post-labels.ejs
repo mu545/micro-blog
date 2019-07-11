@@ -1,0 +1,85 @@
+<section id="labels" class="section">
+  <div class="section-header">
+    <h1>Labels</h1>
+  </div>
+  <div class="row">
+    <div id="labelsList" class="col-12 col-md-8 col-lg-8">
+      <div class="card">
+        <div class="card-header">
+          <h4>List labels</h4>
+          <form id="labelsListFilter" method="POST" action="#" class="card-header-form">
+            <div class="input-group">
+              <input type="text" name="search" class="form-control" data-input="labels" placeholder="Search">
+              <div class="input-group-btn">
+                <button type="submit" class="btn btn-primary btn-icon" data-button="labels"><i class="fas fa-search"></i></button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="card-body">
+          <table id="labelsListTable" class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Total posts</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- fill with list posts -->
+            </tbody>
+          </table>
+        </div>
+        <div id="labelsListPage" class="card-footer text-center">
+          <!-- fill with pages -->
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-4 col-lg-4">
+      <div class="card card-info">
+        <form id="labelsNewForm" method="POST" action="#" class="needs-validation" novalidate="" style="display: block;">
+          <div class="card-header">
+            <h4>Create new label</h4>
+          </div>
+          <div class="card-body">
+            <div id="labelsNewFormMessages">
+              <!-- fill with messages -->
+            </div>
+            <div class="form-group">
+              <label>Name</label>
+              <input type="text" class="form-control" data-input="labels" required placeholder="name of label">
+              <div class="invalid-feedback">
+                name is required (alphabet with length min 6 and max 35)
+              </div>
+            </div>
+          </div>
+          <div class="card-footer text-right">
+            <button type="submit" class="btn btn-primary" data-button="labels">Create</button>
+          </div>
+        </form>
+        <form id="labelsUpdateForm" method="POST" action="#" class="needs-validation" novalidate="" style="display: none;">
+          <div class="card-header">
+            <h4>Update label</h4>
+            <div class="card-header-action">
+              <button type="button" class="btn btn-icon btn-default" data-button="labels"><i class="fas fa-times"></i></button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div id="labelsUpdateFormMessages">
+              <!-- fill with messages -->
+            </div>
+            <div class="form-group">
+              <label>Name</label>
+              <input type="text" class="form-control" data-input="labels" required placeholder="name of label">
+              <div class="invalid-feedback">
+                name is required (alphabet with length min 6 and max 35)
+              </div>
+            </div>
+          </div>
+          <div class="card-footer text-right">
+            <button type="submit" class="btn btn-primary" data-button="labels">Update</button>
+          </div>
+        </form>
+      </div>
+    </div>
+</section>

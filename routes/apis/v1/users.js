@@ -32,12 +32,12 @@ module.exports.get = [
     .isNumeric().withMessage('offset not valid'),
   body('name')
     .optional()
-    .matches(/^(a-z0-9)+$/i).withMessage('name not valid')
-    .isLength({min: 1, max: 255}).withMessage('name not valid'),
+    .isLength({min: 1, max: 255}).withMessage('name not valid')
+    .matches(/^(a-z0-9)+$/i).withMessage('name not valid'),
   body('email')
     .optional()
-    .isEmail().withMessage('email not valid')
-    .isLength({min: 1, max: 225}).withMessage('email not valid'),
+    .isLength({min: 1, max: 225}).withMessage('email not valid')
+    .isEmail().withMessage('email not valid'),
   validationInput,
   searchUserQuery,
   function (req, res) {

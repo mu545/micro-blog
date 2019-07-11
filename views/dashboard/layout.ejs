@@ -45,7 +45,7 @@
           </li>
         </ul>
       </nav>
-      <div class="main-sidebar sidebar-style-2">
+      <div id="mainSidebar" class="main-sidebar sidebar-style-2">
         <aside id="sidebar-wrapper">
           <div class="sidebar-brand">
             <a href="/users/dashboard">Micro Blog</a>
@@ -56,6 +56,12 @@
           <ul class="sidebar-menu">
             <li class="menu-header">Dashboard</li>
             <li><a class="nav-link" href="/users/dashboard"><i class="fas fa-th"></i> <span>Dashboard</span></a></li>
+            <% if (user.user_role.role === 'author' || user.user_role.role === 'admin') { %>
+            <li class="menu-header">Posts</li>
+            <li><a class="nav-link" href="/users/post/list"><i class="fas fa-newspaper"></i> <span>List</span></a></li>
+            <li><a class="nav-link" href="/users/post/create"><i class="fas fa-file-alt"></i> <span>Create</span></a></li>
+            <li><a class="nav-link" href="/users/post/labels"><i class="fas fa-thumbtack"></i> <span>Labels</span></a></li>
+            <% } %>
             <% if (user.user_role.role === 'admin') { %>
             <li class="menu-header">System</li>
             <li><a class="nav-link" href="/users/users"><i class="fas fa-users"></i> <span>Users</span></a>

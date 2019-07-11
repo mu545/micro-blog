@@ -14,12 +14,42 @@ $(document).ready(function () {
    * @return  void
    */
   let init = function () {
+    mainSidebar(dom, context);
     mainNavbar(dom, context);
   };
 
   // Run init
   init();
 });
+
+/**
+ * Main sidebar.
+ *
+ * @param   jquery
+ * @return  context
+ * @return  void
+ */
+let mainSidebar = function (dom, context) {
+  // a.k.a this
+  let self = this;
+
+  // create context
+  dom = dom.find('#mainSidebar');
+  let ctx = context.mainSidebar = {
+    dom: dom
+  };
+
+  /**
+   * Initialization.
+   *
+   * @return  void
+   */
+  let init = function () {
+  };
+
+  // Run init
+  init();
+};
 
 /**
  * Main navbar.

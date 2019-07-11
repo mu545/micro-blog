@@ -6,5 +6,5 @@ module.exports = function (req, res) {
     title: 'Users'
   };
 
-  res.render('dashboard/layout', res.locals);
+  res.render('dashboard/layout');
 };

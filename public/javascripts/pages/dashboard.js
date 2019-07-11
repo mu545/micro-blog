@@ -69,7 +69,7 @@ let dashboardInfo = function (dom, context) {
         swal({
           icon: 'error',
           content: $(messageXHR(jqXHR))[0],
-          button: 'Ok',
+          button: 'Ok'
         });
       },
       success: function (data) {
