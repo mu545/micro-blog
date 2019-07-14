@@ -15,8 +15,8 @@ $(document).ready(function () {
    */
   let init = function () {
     usersList(dom, context);
-    userNewForm(dom, context);
-    userUpdateForm(dom, context);
+    usersNewForm(dom, context);
+    usersUpdateForm(dom, context);
   };
 
   // Run init
@@ -41,12 +41,29 @@ let usersList = function (dom, context) {
     users : []
   };
 
+  // element
+  let domUsersListFilter = dom.find('#usersListFilter');
+  let domUsersListContainer = dom.find('#usersListContainer');
+  let domPage = dom.find('#usersListPage');
+
+  // input
+  let input = ctx.input = domUsersListFilter.find('*[data-input="users"]');
+
   // pagination
   let paginate = ctx.paginate = {
     length: 10,
     offset: 0,
-    name: null,
-    email: null
+    username: null,
+    instance: null,
+    option: {
+      totalPages: 0,
+      startPage: 1,
+      first: false,
+      prev: '<i class="fas fa-angle-left"></i>',
+      next: '<i class="fas fa-angle-right"></i>',
+      last: false,
+      initiateStartPageClick: false
+    }
   }
 
   /**
@@ -55,7 +72,42 @@ let usersList = function (dom, context) {
    * @return  void
    */
   let init = function () {
-    loadUsers();
+    swal({
+      text: 'load user configuration',
+      button: false,
+      closeOnEsc: false,
+      closeOnEnter: false,
+      closeOnClickOutside: false
+    });
+
+    $.ajax({
+      type: 'GET',
+      url: '/users/api/v1/user-roles',
+      data: {length: 999, offset: 0},
+      error: function (jqXHR) {
+        swal({
+          icon: 'error',
+          content: $(messageXHR(jqXHR))[0],
+          button: 'Ok'
+        });
+      },
+      success: function (data, status, jqXHR) {
+        let selectRoles = '';
+
+        for (var roleIndex in data.roles) {
+          let role = data.roles[roleIndex];
+
+          selectRoles += `<option value="${role._id}">${role.role}</option>`;
+        }
+
+        $(context.usersNewForm.select[0]).html(selectRoles);
+        $(context.usersUpdateForm.select[0]).html(selectRoles);
+
+        domUsersListFilter.submit(self.searchUsers);
+
+        loadUsers();
+      }
+    });
   };
 
   /**
@@ -77,8 +129,7 @@ let usersList = function (dom, context) {
       offset: paginate.offset
     };
 
-    if (paginate.name) filter.name = paginate.name;
-    if (paginate.email) filter.email = paginate.email;
+    if (paginate.username) filter.username = paginate.username;
 
     $.ajax({
       type: 'GET',
@@ -92,9 +143,9 @@ let usersList = function (dom, context) {
         });
       },
       success: function (data, status, jqXHR) {
-        let usersListHtml = '';
+        data.total = parseInt(data.total);
 
-        ctx.users = data.users;
+        let usersListHtml = '';
 
         for (let userIndex in data.users) {
           let user = data.users[userIndex];
@@ -105,10 +156,22 @@ let usersList = function (dom, context) {
                             </div></div>`;
         }
 
-        let usersListDom = dom.html(usersListHtml);
+        let usersListDom = domUsersListContainer.html(usersListHtml);
 
-        usersListDom.find('*[data-button="userPhoto"]').click(self.seeUserDetail);
+        usersListDom.find('*[data-button="userPhoto"]').click(self.seeDetailUser);
         usersListDom.find('*[data-toggle="tooltip"]').tooltip();
+
+        paginate.option.totalPages = Math.ceil(data.total / paginate.length);
+
+        if (paginate.instance == null) {
+          paginate.option.onPageClick = self.movePage;
+          paginate.instance = domPage.twbsPagination(paginate.option);
+        } else {
+          domPage.twbsPagination('destroy');
+          domPage.twbsPagination(paginate.option);
+        }
+
+        ctx.users = data;
 
         swal({
           icon: 'success',
@@ -123,22 +186,53 @@ let usersList = function (dom, context) {
   };
 
   /**
-   * See user detail.
+   * Search users.
    *
+   * @param   jquery
    * @return  void
    */
-  this.seeUserDetail = function (jq) {
-    let userIndex = jq.currentTarget.dataset.userIndex;
-    let user = ctx.users[userIndex];
+  this.searchUsers = function (jq) {
+    jq.preventDefault();
 
-    context.userNewForm.dom.hide();
-    context.userUpdateForm.dom.show();
-    context.userUpdateForm.select[0].value = user.user_role.role;
-    context.userUpdateForm.input[0].value = user.user_info.name;
-    context.userUpdateForm.input[1].value = user.user_info.email;
-    context.userUpdateForm.input[2].value = user.user_info.phone;
-    context.userUpdateForm.input[3].value = user.username;
-    context.userUpdateForm.user = user;
+    paginate.offset = 0;
+    paginate.username = input[0].value;
+    paginate.option.startPage = 1;
+
+    self.loadUsers();
+  };
+
+  /**
+   * Move page.
+   *
+   * @param   jquery
+   * @param   number
+   * @return  void
+   */
+  this.movePage = function (jq, page) {
+    paginate.offset = (paginate.length * page) - paginate.length;
+    paginate.option.startPage = page;
+
+    self.loadUsers();
+  };
+
+  /**
+   * See detail of user.
+   *
+   * @param   jquery
+   * @return  void
+   */
+  this.seeDetailUser = function (jq) {
+    let userIndex = jq.currentTarget.dataset.userIndex;
+    let user = ctx.users.users[userIndex];
+
+    context.usersNewForm.dom.hide();
+    context.usersUpdateForm.dom.show();
+    context.usersUpdateForm.select[0].value = user.user_role._id;
+    context.usersUpdateForm.input[0].value = user.user_info.name;
+    context.usersUpdateForm.input[1].value = user.user_info.email;
+    context.usersUpdateForm.input[2].value = user.user_info.phone;
+    context.usersUpdateForm.input[3].value = user.username;
+    context.usersUpdateForm.user = user;
   };
 
   // Run init
@@ -146,29 +240,29 @@ let usersList = function (dom, context) {
 };
 
 /**
- * New user form.
+ * Form new user.
  *
  * @param   jquery
  * @param   context
  * @return  void
  */
-let userNewForm = function (dom, context) {
+let usersNewForm = function (dom, context) {
   // a.k.a this
   let self = this;
 
   // create context
   dom = dom.find('#usersNewForm');
-  let ctx = context.userNewForm = {
+  let ctx = context.usersNewForm = {
     dom: dom
   };
+
+  // element
+  let domMessages = dom.find('#usersNewFormMessages');
 
   // input
   let select = ctx.select = dom.find('*[data-select="users"]');
   let input = ctx.input = dom.find('*[data-input="users"]');
   let button = ctx.button = dom.find('*[data-button="users"]');
-
-  // element
-  let domMessages = dom.find('#usersNewFormMessages');
 
   /**
    * Initialization.
@@ -215,25 +309,16 @@ let userNewForm = function (dom, context) {
 
         swal({
           icon: 'error',
-          text: 'failure to create new user',
+          content: $(messageXHR(jqXHR))[0],
           button: 'Ok'
         });
       },
       success: function (data, status, jqXHR) {
         domMessages.html('');
-        select[0].value = 'user';
-        input[0].value = '';
-        input[1].value = '';
-        input[2].value = '';
-        input[3].value = '';
-        input[4].value = '';
-        input[5].value = '';
-        dom.removeClass('was-validated');
+        input.val('');
+        $(jq.target).removeClass('was-validated');
 
-        swal({
-          text: 'successful create new user',
-          button: 'Ok'
-        });
+        context.usersList.loadUsers();
       }
     });
 
@@ -245,30 +330,30 @@ let userNewForm = function (dom, context) {
 };
 
 /**
- * userUpdateForm.
+ * Form update user.
  *
  * @param   jquery
  * @param   context
  * @return  void
  */
-let userUpdateForm = function (dom, context) {
+let usersUpdateForm = function (dom, context) {
   // a.k.a this
   let self = this;
 
   // create context
   dom = dom.find('#usersUpdateForm');
-  let ctx = context.userUpdateForm = {
+  let ctx = context.usersUpdateForm = {
     dom: dom,
     user: null
   };
+
+  // element
+  let domMessages = dom.find('#usersUpdateFormMessages');
 
   // input
   let input = ctx.input = dom.find('*[data-input="users"]');
   let select = ctx.select = dom.find('*[data-select="users"]');
   let button = ctx.button = dom.find('*[data-button="users"]');
-
-  // element
-  let domMessages = dom.find('#usersUpdateFormMessages');
 
   /**
    * Initialization.
@@ -287,7 +372,7 @@ let userUpdateForm = function (dom, context) {
    */
   this.closeDetailUser = function () {
     ctx.dom.hide();
-    context.userNewForm.dom.show();
+    context.usersNewForm.dom.show();
   };
 
   /**
@@ -322,14 +407,14 @@ let userUpdateForm = function (dom, context) {
 
         swal({
           icon: 'error',
-          text: 'failure to update user',
+          content: $(messageXHR(jqXHR))[0],
           button: 'Ok'
         });
       },
       success: function (data, status, jqXHR) {
         swal({
           icon: 'success',
-          text: 'successful update user',
+          content: $(messageXHR(jqXHR))[0],
           button: 'Ok'
         })
         .then(function () {

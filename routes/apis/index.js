@@ -4,6 +4,7 @@ const labels = require('./v1/labels.js');
 const post = require('./v1/post.js');
 const posts = require('./v1/posts.js');
 const systemInformation = require('./v1/system-information.js');
+const userRoles = require('./v1/user-roles.js');
 const user = require('./v1/user.js');
 const users = require('./v1/users.js');
 
@@ -30,6 +31,9 @@ module.exports = function (router) {
 
   router.route('/api/v1/system-information')
     .get(systemInformation.get);
+
+  router.route('/api/v1/user-roles')
+    .get(userRoles.get);
 
   router.route('/api/v1/user')
     .post(user.post)

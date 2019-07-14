@@ -4,10 +4,18 @@
   </div>
   <div class="section-body">
     <div class="row">
-      <div class="col-12 col-md-6 col-lg-8 col-xl-8">
+      <div id="usersList" class="col-12 col-md-6 col-lg-8 col-xl-8">
         <div class="card">
           <div class="card-header">
             <h4>List users</h4>
+            <form id="usersListFilter" method="POST" action="#" class="card-header-form">
+              <div class="input-group">
+                <input type="text" name="search" class="form-control" data-input="users" placeholder="Search">
+                <div class="input-group-btn">
+                  <button type="submit" class="btn btn-primary btn-icon" data-button="users"><i class="fas fa-search"></i></button>
+                </div>
+              </div>
+            </form>
           </div>
           <div class="card-body pb-0">
             <div class="row mb-3">
@@ -17,9 +25,12 @@
                 </div>
               </div>
             </div>
-            <div id="usersList" class="row">
+            <div id="usersListContainer" class="row">
               <!-- fill with list users -->
             </div>
+          </div>
+          <div id="usersListPage" class="card-footer">
+            <!-- fill with pages -->
           </div>
         </div>
       </div>
@@ -36,9 +47,7 @@
               <div class="form-group">
                 <label>User role</label>
                 <select class="form-control" data-select="users">
-                  <option value="admin">Admin</option>
-                  <option value="author">Author</option>
-                  <option selected value="user">User</option>
+                  <!-- fill with list roles -->
                 </select>
               </div>
               <div class="form-group">
@@ -99,9 +108,7 @@
               <div class="form-group">
                 <label>User role</label>
                 <select class="form-control" data-select="users">
-                  <option value="admin">Admin</option>
-                  <option value="author">Author</option>
-                  <option selected value="user">User</option>
+                  <!-- fill with list roles -->
                 </select>
               </div>
               <div class="form-group">
