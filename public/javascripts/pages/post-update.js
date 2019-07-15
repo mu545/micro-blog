@@ -113,10 +113,11 @@ let postUpdateForm = function (dom, context) {
           },
           success: function (data) {
             input[0].value = data.post.title;
+            input[1].value = data.post.subtitle;
             $(select[0]).val(data.post.labels);
-            input[1].value = data.post.content;
+            input[2].value = data.post.content;
 
-            domContentSummernote = $(input[1]).summernote({
+            domContentSummernote = $(input[2]).summernote({
               dialogsInBody: true,
               minHeight: 150,
               toolbar: [
@@ -149,8 +150,9 @@ let postUpdateForm = function (dom, context) {
     let updatePost = {
       _id: ctx.post._id,
       title: input[0].value,
+      subtitle: input[1].value,
       labels: $(select[0]).val(),
-      content: input[1].value
+      content: input[2].value
     };
 
     $.ajax({

@@ -52,7 +52,7 @@ module.exports.get = [
           res.status(400).json({err: 'could not found posts'});
         } else {
           req.models.posts.find(res.locals.query)
-            .select('title created updated')
+            .select('title subtitle created updated')
             .populate('labels', '_id label')
             .populate('created_by', '_id name')
             .skip(res.locals.input.offset)

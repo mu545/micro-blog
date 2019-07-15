@@ -250,6 +250,7 @@ let postsList = function (dom, context) {
     let selectedPost = ctx.posts.posts[postIndex];
 
     context.postsDetailForm.input[0].value = selectedPost.title;
+    context.postsDetailForm.input[1].value = selectedPost.subtitle;
 
     let labels = '';
 
@@ -259,9 +260,9 @@ let postsList = function (dom, context) {
 
     $(context.postsDetailForm.select[0]).html(labels);
 
-    context.postsDetailForm.input[1].value = moment(new Date(selectedPost.created)).format('dddd, MMMM Do YYYY, h:mm:ss A');
-    context.postsDetailForm.input[2].value = selectedPost.updated ? moment(new Date(selectedPost.updated)).format('dddd, MMMM Do YYYY, h:mm:ss A') : '-';
-    context.postsDetailForm.input[3].value = selectedPost.created_by.name;
+    context.postsDetailForm.input[2].value = moment(new Date(selectedPost.created)).format('dddd, MMMM Do YYYY, h:mm:ss A');
+    context.postsDetailForm.input[3].value = selectedPost.updated ? moment(new Date(selectedPost.updated)).format('dddd, MMMM Do YYYY, h:mm:ss A') : '-';
+    context.postsDetailForm.input[4].value = selectedPost.created_by.name;
     context.postsDetailForm.post = selectedPost;
   };
 

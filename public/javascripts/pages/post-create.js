@@ -80,7 +80,7 @@ let postNewForm = function (dom, context) {
 
         $(select[0]).html(selectLabels);
 
-        domContentSummernote = $(input[1]).summernote({
+        domContentSummernote = $(input[2]).summernote({
           dialogsInBody: true,
           minHeight: 150,
           toolbar: [
@@ -110,8 +110,9 @@ let postNewForm = function (dom, context) {
 
     let newPost = {
       title: input[0].value,
+      subtitle: input[1].value,
       labels: $(select[0]).val(),
-      content: input[1].value
+      content: input[2].value
     };
 
     $.ajax({

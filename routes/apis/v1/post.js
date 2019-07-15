@@ -46,6 +46,7 @@ function isLabelsExists(req, res, next) {
 function createPost(req, res, next) {
   let createPost = new req.models.posts({
     title: res.locals.input.title,
+    subtitle: res.locals.input.subtitle,
     labels: res.locals.input.labels,
     created_by: res.locals.user.user_info._id,
     created: new Date(),
@@ -88,6 +89,7 @@ function isPostIdExists(req, res, next) {
 function updatePost(req, res, next) {
   let updatePost = {
     title: res.locals.input.title,
+    subtitle: res.locals.input.subtitle,
     labels: res.locals.input.labels,
     content: res.locals.input.content,
     updated: new Date()
@@ -134,6 +136,7 @@ function decreaseLabelsTotalPosts(req, res, next) {
 function createInput(req, res, next) {
   res.locals.input = {
     title: req.body.title,
+    subtitle: req.body.subtitle,
     labels: req.body.labels,
     content: req.body.content
   };
@@ -145,6 +148,9 @@ module.exports.post = [
   body('title')
     .exists({checkNull: true, checkFalsy: true}).withMessage('title is required')
     .matches(/^[a-z0-9 ]+$/i).withMessage('title is not valid'),
+  body('subtitle')
+    .exists({checkFalsy: true}).withMessage('subtitle is required')
+    .matches(/^[a-z0-9 ]+$/i).withMessage('subtitle is not valid'),
   body('labels')
     .exists({checkNull: true, checkFalsy: true}).withMessage('labels is required')
     .isArray().withMessage('labels is not valid')
@@ -180,6 +186,7 @@ module.exports.get = [
     let post = {
       _id: res.locals.post._id,
       title: res.locals.post.title,
+      subtitle: res.locals.post.subtitle,
       labels: res.locals.post.labels,
       content: res.locals.post.content
     };
@@ -192,6 +199,7 @@ function updateInput(req, res, next) {
   res.locals.input = {
     _id: req.body._id,
     title: req.body.title,
+    subtitle: req.body.subtitle,
     labels: req.body.labels,
     content: req.body.content
   };
@@ -203,6 +211,9 @@ module.exports.put = [
   body('title')
     .exists({checkNull: true, checkFalsy: true}).withMessage('title is required')
     .matches(/^[a-z0-9 ]+$/i).withMessage('title is not valid'),
+  body('subtitle')
+    .exists({checkFalsy: true}).withMessage('subtitle is required')
+    .matches(/^[a-z0-9 ]+$/i).withMessage('subtitle is not valid'),
   body('labels')
     .exists({checkNull: true, checkFalsy: true}).withMessage('labels is required')
     .isArray().withMessage('labels is not valid')
