@@ -71,19 +71,20 @@ function increaseLabelsTotalPosts(req, res, next) {
 }
 
 function isPostIdExists(req, res, next) {
-  req.models.posts.findOne(
-    {_id: res.locals.input._id},
-    function (err, post) {
-      if (err) {
-        res.status(400).json({err: err.message});
-      } else if (!post) {
-        res.status(400).json({err: 'could not found post'});
-      } else {
-        res.locals.post = post;
+  req.models.posts.findOne({_id: res.locals.input._id})
+    .populate('labels')
+    .populate('created_by')
+    .exec(function (err, post) {
+        if (err) {
+          res.status(400).json({err: err.message});
+        } else if (!post) {
+          res.status(400).json({err: 'could not found post'});
+        } else {
+          res.locals.post = post;
 
-        next();
-      }
-    });
+          next();
+        }
+      });
 }
 
 function updatePost(req, res, next) {
@@ -102,7 +103,11 @@ function updatePost(req, res, next) {
       if (err) {
         res.status(400).json({err: err.message});
       } else {
-        res.locals.input.labels = res.locals.post.labels;
+        res.locals.input.labels = [];
+
+        for (var label of res.locals.post.labels) {
+          res.locals.input.labels.push(label._id);
+        }
 
         next();
       }
@@ -116,7 +121,11 @@ function deletePost(req, res, next) {
       if (err) {
         res.status(400).json({err: err.message});
       } else {
-        res.locals.input.labels = res.locals.post.labels;
+        res.locals.input.labels = [];
+
+        for (var label of res.locals.post.labels) {
+          res.locals.input.labels.push(label._id);
+        }
 
         next();
       }
@@ -188,6 +197,12 @@ module.exports.get = [
       title: res.locals.post.title,
       subtitle: res.locals.post.subtitle,
       labels: res.locals.post.labels,
+      created_by: {
+        _id: res.locals.post.created_by._id,
+        name: res.locals.post.created_by.name
+      },
+      created: res.locals.post.created,
+      updated: res.locals.post.updated,
       content: res.locals.post.content
     };
 

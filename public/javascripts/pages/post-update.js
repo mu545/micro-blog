@@ -112,9 +112,15 @@ let postUpdateForm = function (dom, context) {
             });
           },
           success: function (data) {
+            let selectLabels = [];
+
+            for (var label of data.post.labels) {
+              selectLabels.push(label._id);
+            }
+
             input[0].value = data.post.title;
             input[1].value = data.post.subtitle;
-            $(select[0]).val(data.post.labels);
+            $(select[0]).val(selectLabels);
             input[2].value = data.post.content;
 
             domContentSummernote = $(input[2]).summernote({
