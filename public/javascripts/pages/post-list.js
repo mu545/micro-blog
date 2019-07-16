@@ -218,6 +218,8 @@ let postsList = function (dom, context) {
   this.searchPosts = function (jq) {
     jq.preventDefault();
 
+    paginate.offset = 0;
+
     if (input[0].value.length > 0) paginate.title = input[0].value;
 
     paginate.option.startPage = 1;

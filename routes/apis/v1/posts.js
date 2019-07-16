@@ -60,7 +60,7 @@ module.exports.get = [
             .exec(function (err, posts) {
               if (err) {
                 res.status(400).json({err: err.message});
-              } else if (!posts) {
+              } else if (posts.length < 1) {
                 res.status(400).json({err: 'could not found posts'});
               } else {
                 res.json({posts: posts, total: totalPosts});
