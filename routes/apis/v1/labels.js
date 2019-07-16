@@ -58,7 +58,7 @@ module.exports.get = [
             .exec(function (err, labels) {
               if (err) {
                 res.status(400).json({err: err.message});
-              } else if (!labels) {
+              } else if (labels.length < 1) {
                 res.status(400).json({err: 'could not found labels'});
               } else {
                 res.json({labels: labels, total: totalLabels});

@@ -215,6 +215,8 @@ let labelsList = function (dom, context) {
   this.searchLabels = function (jq) {
     jq.preventDefault();
 
+    paginate.offset = 0;
+
     if (input[0].value.length > 0) paginate.label = input[0].value;
     else paginate.label = null;
 
