@@ -10,25 +10,25 @@ function validationInput(req, res, next) {
 
 function validateUser(req, res, next) {
   req.models.usersAccess.findOne(
-    {username: req.body.username},
+    {username: res.locals.input.username},
     function (err, userAccess) {
       if (err) {
         res.status(400).json({err: err.message});
       } else if (!userAccess) {
         res.status(400).json({err: 'uknown username'});
       } else {
-        let userPassword = crypto.createHash('md5').update(req.body.password).digest('hex');
+        let userPassword = crypto.createHash('md5')
+                            .update(res.locals.input.password)
+                            .digest('hex');
 
         if (userAccess.password === userPassword) {
-          res.locals = {
-            currentUser : {
-              _id: userAccess._id,
-              username: userAccess.username,
-              last_login: null,
-              session: null,
-              user_info: userAccess.user_info,
-              user_role: userAccess.user_role
-            }
+          res.locals.user = {
+            _id: userAccess._id,
+            username: userAccess.username,
+            last_login: null,
+            session: null,
+            user_info: userAccess.user_info,
+            user_role: userAccess.user_role
           };
 
           next();
@@ -54,13 +54,14 @@ function createSession(req, res, next) {
     if (err) {
       res.status(400).json({err: err.message});
     } else {
-      res.locals.currentUser.last_login = new Date(session.created);
-      res.locals.currentUser.session = {
+      res.locals.user.last_login = new Date(session.created);
+      res.locals.user.session = {
         _id: session._id,
         created: session.created,
         expired: session.expired,
         token: sessionToken
-      }
+      };
+      res.locals.increase_total_user_active = 1;
 
       next();
     }
@@ -69,59 +70,33 @@ function createSession(req, res, next) {
 
 function updateUserSession(req, res, next) {
   req.models.usersAccess.updateOne(
-    {_id: res.locals.currentUser._id},
-    {$set: {last_login: new Date(res.locals.currentUser.session.created), session: res.locals.currentUser.session._id}},
+    {_id: res.locals.user._id},
+    {
+      $set: {
+        last_login: new Date(res.locals.user.session.created),
+        session: res.locals.user.session._id
+      }
+    },
     function (err) {
-      if (err) res.status(400).json({err: err.message});
-      else next();
+      if (err) {
+        res.status(400).json({err: err.message});
+      } else {
+        next();
+      }
     });
 }
 
-function newUserOnline(req, res, next) {
-  req.models.systemInformation.newUserOnline(function (err) {
-    if (err) res.status({err: err.message});
-    else next();
-  });
+function increaseTotalUserActive(req, res, next) {
+  req.models.systemInformation.updateOne(
+    {},
+    {$inc: {total_active_users: res.locals.increase_total_user_active}},
+    function (err) {
+      next();
+    });
 }
 
-module.exports.post = [
-  body('username')
-    .exists({checkFalsy: true}).withMessage('username is required')
-    .isAlphanumeric().withMessage('username not valid')
-    .isLength({min: 6, max: 35}).withMessage('username not valid'),
-  body('password')
-    .exists({checkFalsy: true}).withMessage('password is required')
-    .isAlphanumeric().withMessage('password not valid')
-    .isLength({min: 6, max: 35}).withMessage('password not valid'),
-  validationInput,
-  validateUser,
-  createSession,
-  updateUserSession,
-  newUserOnline,
-  function (req, res) {
-    let currentUser = {
-      username: res.locals.currentUser.username,
-      last_login: res.locals.currentUser.last_login,
-      session: {
-        _id: res.locals.currentUser.session._id,
-        created: res.locals.currentUser.session.created,
-        expired: res.locals.currentUser.session.expired,
-        token: res.locals.currentUser.session.token
-      },
-      user_info: res.locals.currentUser.user_info,
-      user_role: res.locals.currentUser.user_role,
-    };
-
-    res.cookie(
-      'session',
-      {id: res.locals.currentUser.session._id, token: res.locals.currentUser.session.token},
-      {path: '/users', expires: new Date(res.locals.currentUser.session.expired)}
-    ).json({msg: 'login successful', user : currentUser});
-  }
-];
-
-function destroyUserSession(req, res, next) {
-  if (res.locals.user == null) return res.json({msg: 'no auth found'});
+function deleteSession(req, res, next) {
+  let currentDate = Date.now();
 
   req.models.session.deleteOne(
     {_id: res.locals.user.session._id},
@@ -129,39 +104,90 @@ function destroyUserSession(req, res, next) {
       if (err) {
         res.status(400).json({err: err.message});
       } else {
-        res.locals.currentUser = {
-          _id: res.locals.user._id,
-          session : {
-            _id: null,
-            created: Date.now(),
-            expired: Date.now() - 1
-          }
-        };
-
-        res.cookie(
-          'session',
-          {id: res.locals.user.session._id, token: res.locals.user.session.token},
-          {path: '/users', expires: new Date(res.locals.currentUser.session.expired)}
-        );
+        res.locals.user.session._id = null;
+        res.locals.user.session.expired = currentDate;
+        res.locals.increase_total_user_active = -1;
 
         next();
       }
-    }
-  );
+    });
 }
 
-function newUserOffline(req, res, next) {
-  req.models.systemInformation.newUserOffline(function (err) {
-    if (err) res.status({err: err.message});
-    else next();
-  });
-};
+function deleteExpiredSessions(req, res, next) {
+  req.models.session.deleteMany(
+    {expired: {$lte: Date.now()}},
+    function (err, sessionDeleted) {
+      if (err) {
+        console.error(err);
+      } else {
+        res.locals.increase_total_user_active = sessionDeleted.deletedCount > 0 ? -sessionDeleted.deletedCount : 0;
+
+        increaseTotalUserActive(req, res, function () {
+          // Ok
+        });
+      }
+    });
+
+  next();
+}
+
+function createInput(req, res, next) {
+  res.locals.input = {
+    username: req.body.username,
+    password: req.body.password
+  };
+
+  next();
+}
+
+module.exports.post = [
+  body('username')
+    .exists({checkFalsy: true}).withMessage('username is required')
+    .isLength({min: 6, max: 35}).withMessage('username is not valid')
+    .isAlphanumeric().withMessage('username is not valid'),
+  body('password')
+    .exists({checkFalsy: true}).withMessage('password is required')
+    .isLength({min: 6, max: 35}).withMessage('password is not valid')
+    .isAlphanumeric().withMessage('password not valid'),
+  validationInput,
+  createInput,
+  validateUser,
+  createSession,
+  updateUserSession,
+  increaseTotalUserActive,
+  deleteExpiredSessions,
+  function (req, res) {
+    let currentUser = {
+      username: res.locals.user.username,
+      last_login: res.locals.user.last_login,
+      session: {
+        _id: res.locals.user.session._id,
+        created: res.locals.user.session.created,
+        expired: res.locals.user.session.expired,
+        token: res.locals.user.session.token
+      },
+      user_info: res.locals.user.user_info,
+      user_role: res.locals.user.user_role,
+    };
+
+    res.cookie(
+      'session',
+      {id: res.locals.user.session._id, token: res.locals.user.session.token},
+      {path: '/users', expires: new Date(res.locals.user.session.expired)}
+    ).json({msg: 'login successful', user : currentUser});
+  }
+];
 
 module.exports.delete = [
-  destroyUserSession,
+  deleteSession,
   updateUserSession,
-  newUserOffline,
+  increaseTotalUserActive,
+  deleteExpiredSessions,
   function (req, res) {
-    res.json({msg: 'logout successful'});
+    res.cookie(
+      'session',
+      null,
+      {path: '/users', expires: new Date(res.locals.user.session.expired)}
+    ).json({msg: 'logout successful'});
   }
 ];
