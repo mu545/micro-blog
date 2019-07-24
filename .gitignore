@@ -2,3 +2,5 @@
 package-lock.json
 # denied node_modules
 /node_modules
+# denied environment
+.env

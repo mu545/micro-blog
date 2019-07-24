@@ -1,0 +1,107 @@
+<div id="user" class="card card-primary">
+  <div class="card-body">
+    <div class="row mt-4">
+      <div class="col-12 col-lg-12">
+        <div class="wizard-steps">
+          <div class="wizard-step">
+            <div class="wizard-step-icon">
+              <i class="far fa-dot-circle"></i>
+            </div>
+            <div class="wizard-step-label">
+              Start
+            </div>
+          </div>
+          <div class="wizard-step">
+            <div class="wizard-step-icon">
+              <i class="fas fa-database"></i>
+            </div>
+            <div class="wizard-step-label">
+              Mongo
+            </div>
+          </div>
+          <div class="wizard-step wizard-step-active">
+            <div class="wizard-step-icon">
+              <i class="far fa-user"></i>
+            </div>
+            <div class="wizard-step-label">
+              User Admin
+            </div>
+          </div>
+          <div class="wizard-step">
+            <div class="wizard-step-icon">
+              <i class="far fa-check-circle"></i>
+            </div>
+            <div class="wizard-step-label">
+              Complete
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <form id="userSetupForm" method="POST" action="#" class="wizard-content mt-2 needs-validation" novalidate="">
+      <div class="wizard-pane">
+        <div class="form-group row align-items-center">
+          <label class="col-md-4 text-md-right text-left">Complete name</label>
+          <div class="col-lg-4 col-md-6">
+            <input type="text" name="name" class="form-control" data-input="user" required placeholder="complete user name">
+            <div class="invalid-feedback">
+              complete name is required
+            </div>
+          </div>
+        </div>
+        <div class="form-group row align-items-center">
+          <label class="col-md-4 text-md-right text-left">Email</label>
+          <div class="col-lg-4 col-md-6">
+            <input type="email" name="email" class="form-control" data-input="user" required placeholder="user email address">
+            <div class="invalid-feedback">
+              email address is required
+            </div>
+          </div>
+        </div>
+        <div class="form-group row align-items-center">
+          <label class="col-md-4 text-md-right text-left">Phone number</label>
+          <div class="col-lg-4 col-md-6">
+            <input type="tel" name="phone" class="form-control" data-input="user" required placeholder="phone number">
+            <div class="invalid-feedback">
+              phone number is required
+            </div>
+          </div>
+        </div>
+        <div class="form-group row align-items-center">
+          <label class="col-md-4 text-md-right text-left">Username</label>
+          <div class="col-lg-4 col-md-6">
+            <input type="text" name="username" class="form-control" data-input="user" required min="6" max="35" placeholder="username used to login">
+            <div class="invalid-feedback">
+              user name is required (alphabet or numeric with length min 6 and max 35)
+            </div>
+          </div>
+        </div>
+        <div class="form-group row align-items-center">
+          <label class="col-md-4 text-md-right text-left">Password</label>
+          <div class="col-lg-4 col-md-6">
+            <input type="password" name="password" class="form-control" data-input="user" required min="6" max="35" placeholder="main password">
+            <div class="invalid-feedback">
+              alphabet or numeric with length min 6 and max 35
+            </div>
+          </div>
+        </div>
+        <div class="form-group row align-items-center">
+          <label class="col-md-4 text-md-right text-left"></label>
+          <div class="col-lg-4 col-md-6">
+            <input type="password" name="confirm" class="form-control" data-input="user" required min="6" max="35" placeholder="confirm main password">
+            <div class="invalid-feedback">
+              alphabet or numeric with length min 6 and max 35
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-md-4"></div>
+          <div class="col-lg-4 col-md-6 text-right">
+            <button type="submit" class="btn btn-icon icon-right btn-primary">Next <i class="fas fa-arrow-right"></i></button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
