@@ -4,11 +4,11 @@
  * Module dependencies.
  */
 
-var app = require('../app');
-var debug = require('debug')('micro-blog:server');
+var app = require('../setup');
+var debug = require('debug')('micro-blog:setup');
 var http = require('http');
-var mongoose = require('mongoose');
 var dotenv = require('dotenv');
+var mongoose = require('mongoose');
 
 /**
  * Read environment file.
@@ -33,21 +33,29 @@ var server = http.createServer(app);
  * Listen on provided port, on all network interfaces.
  */
 
-mongoose.connect(process.env.MONGO_STRING, {
-    useNewUrlParser: true,
-    user: process.env.MONGO_USERNAME,
-    pass: process.env.MONGO_PASSWORD
-  },
-  function (err) {
-    if (err) {
-     console.error(err);
-     process.exit(1);
-    } else {
-      server.listen(port);
-      server.on('error', onError);
-      server.on('listening', onListening);
-    }
-});
+function listenServer() {
+  server.listen(port);
+  server.on('error', onError);
+  server.on('listening', onListening);
+}
+
+if (process.env.SETUP_MONGO == 'true') {
+  mongoose.connect(process.env.MONGO_STRING, {
+      useNewUrlParser: true,
+      user: process.env.MONGO_USERNAME,
+      pass: process.env.MONGO_PASSWORD
+    },
+    function (err) {
+      if (err) {
+        console.error(err);
+        process.exit(1);
+      } else {
+        listenServer();
+      }
+    });
+} else {
+  listenServer();
+}
 
 /**
  * Normalize a port into a number, string, or false.
