@@ -1,7 +1,7 @@
-<h1 align="center">Stisla</h1>
+<h1 align="center">micro-blog</h1>
 
 <p align="center">
-  Stisla is a blog platform which will help you to enjoy blogging.
+  micro-blog is a blog platform which will help you to enjoy blogging.
 </p>
 
 ## Installing
